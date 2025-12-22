@@ -13,6 +13,11 @@ options:
   -w, --weeks      weeks will also be used in the output
   -W, --max-weeks  show weeks as the highest time unit
   -a, --add-and    displays and before the last time unit
+```
+Example:
+```
+$ cut -d. -f1 /proc/uptime | duration
+12 days, 4 hours, 57 minutes, 23 seconds
 
 $ echo '123456789' | duration 
 3 years, 10 months, 29 days, 21 hours, 33 minutes, 9 seconds
