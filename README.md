@@ -7,7 +7,7 @@ positional arguments:
 
 options:
   -h, --help       show this help message and exit
-  -v, --version    show program's version number and exit
+  -v, --version    show program s version number and exit
   -s, --short      short units output format
   -c N, --count N  maximum number of units in the output
   -w, --weeks      weeks will also be used in the output
