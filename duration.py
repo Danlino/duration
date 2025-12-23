@@ -219,7 +219,7 @@ def test2k(sec: int) -> bool:
 def original_time(sec: int) -> str:
     now = datetime.now()
     ago = now - timedelta(seconds=sec)
-    return f'({ago.strftime("%a, %-d.%b %Y %H:%M")})'
+    return f'{ago.strftime("%a, %-d.%b %Y %H:%M")}'
 
 def get_sec(sec: int | None) -> int:
     if sec is not None:
@@ -262,7 +262,7 @@ def main():
             print(f"{rl}")
 
         case ( True, False ):
-            print(f"{rl} {rt}")
+            print(f"{rl} ({rt})")
 
         case ( _, True ):
             print(f"{rt}")
