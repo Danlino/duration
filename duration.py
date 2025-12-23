@@ -72,8 +72,7 @@ def conversion(S: int, use_weeks: bool, only_weeks: bool) -> tuple:
 
     current = datetime.now()
 
-    y = 0
-    m = 0
+    y = m = 0
 
     if not only_weeks:
         while True:
@@ -188,6 +187,13 @@ def get_arg() -> Namespace:
                         help='show real date/time alongside relative'
     )
 
+    parser.add_argument('-R', '--real-only',
+                        action='store_true',
+                        dest='real_only',
+                        default=False,
+                        help='show real date/time'
+    )
+
     parser.add_argument('sec',
                         nargs='?',
                         type=int,
@@ -245,11 +251,21 @@ def main():
     test2k(sec)
     cou = abs(arg.count)
 
-    realtime = f' {original_time(sec) if arg.real_time else ""}'
-    y, m, w, d, H, M, S = conversion( sec, use_weeks=arg.week, only_weeks=arg.only_week )
-    relatime = units( aand=arg.add_and, cou=cou, short=arg.short, y=y, m=m, w=w, d=d, H=H, M=M, S=S)
+    ys = conversion( sec, arg.week, arg.only_week )
 
-    print(f"{relatime}{realtime}")
+    rt = original_time(sec)
+    rl = units( arg.add_and, cou, arg.short, *ys )
+
+    match ( arg.real_time, arg.real_only ):
+
+        case ( False, False ):
+            print(f"{rl}")
+
+        case ( True, False ):
+            print(f"{rl} {rt}")
+
+        case ( _, True ):
+            print(f"{rt}")
 
 if __name__ == "__main__":
     main()
