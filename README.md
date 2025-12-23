@@ -1,20 +1,23 @@
-```bash
+##### Usage:
+```
 $ duration 
-usage: duration [-h] [-v] [-s] [-c N] [-w] [-W] [-a] [sec]
+usage: duration [-h] [-v] [-s] [-c N] [-w] [-W] [-a] [-r] [-R] [sec]
 
 positional arguments:
   sec              time interval in seconds
 
 options:
   -h, --help       show this help message and exit
-  -v, --version    show program s version number and exit
+  -v, --version    show program's version number and exit
   -s, --short      short units output format
   -c N, --count N  maximum number of units in the output
   -w, --weeks      weeks will also be used in the output
   -W, --max-weeks  show weeks as the highest time unit
-  -a, --add-and    displays and before the last time unit
+  -a, --add-and    shows "and" before the last unit (long format)
+  -r, --real-time  show real date/time alongside relative
+  -R, --real-only  show real date/time
 ```
-Example:
+##### Example:
 ```
 $ cut -d. -f1 /proc/uptime | duration
 12 days, 4 hours, 57 minutes, 23 seconds
@@ -36,4 +39,7 @@ $ duration 123456789 -c2
 
 $ duration 123456789 -c3 -a
 3 years, 10 months, and 29 days
+
+$ duration 123456789 -R
+Tue, 25.Jan 2022 00:58
 ```
