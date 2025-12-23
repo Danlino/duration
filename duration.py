@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-__version__ = "0.0.0"
+__version__ = "0.1.0"
+from datetime import datetime, timedelta
 from argparse import Namespace
-from datetime import datetime
-import calendar
 import argparse
+import calendar
 import sys
 
 def units( aand: bool, cou: int, short: bool, y=0, m=0, w=0, d=0, H=0, M=0, S=0) -> str:
@@ -178,7 +178,14 @@ def get_arg() -> Namespace:
                         action='store_true',
                         dest='add_and',
                         default=False,
-                        help='displays and before the last time unit'
+                        help='shows "and" before the last unit (long format)'
+    )
+
+    parser.add_argument('-r', '--real-time',
+                        action='store_true',
+                        dest='real_time',
+                        default=False,
+                        help='show real date/time alongside relative'
     )
 
     parser.add_argument('sec',
@@ -203,30 +210,46 @@ def test2k(sec: int) -> bool:
         sys.exit(1)
     return True
 
-def get_sec(sec: int) -> int:
+def original_time(sec: int) -> str:
+    now = datetime.now()
+    ago = now - timedelta(seconds=sec)
+    return f'({ago.strftime("%a, %-d.%b %Y %H:%M")})'
 
+def get_sec(sec: int | None) -> int:
     if sec is not None:
-        return abs(sec)
-
-    if not sys.stdin.isatty():
+        value = sec
+    elif not sys.stdin.isatty():
         data = sys.stdin.read().strip()
-        if data:
-            try:
-                return abs(int(data))
-            except ValueError:
-                print("Error: Piped input must be an integer", file=sys.stderr)
-                sys.exit(1)
-    print("Error: Value in seconds is required", file=sys.stderr)
-    sys.exit(1)
+        if not data:
+            print("Error: No input provided via pipe.", file=sys.stderr)
+            sys.exit(1)
+        try:
+            value = int(data)
+        except ValueError:
+            print("Error: Piped input must be an integer.", file=sys.stderr)
+            sys.exit(1)
+    else:
+        print("Error: Value in seconds is required.", file=sys.stderr)
+        sys.exit(1)
+
+    if value < 0:
+        print("Warning: Negative value provided, treating as absolute duration", 
+              file=sys.stderr)
+        return abs(value)
+    
+    return value
 
 def main():
     arg = get_arg()
-    cou = abs(arg.count)
     sec = get_sec(arg.sec)
     test2k(sec)
+    cou = abs(arg.count)
 
+    realtime = f' {original_time(sec) if arg.real_time else ""}'
     y, m, w, d, H, M, S = conversion( sec, use_weeks=arg.week, only_weeks=arg.only_week )
-    print( units( aand=arg.add_and, cou=cou, short=arg.short, y=y, m=m, w=w, d=d, H=H, M=M, S=S) )
+    relatime = units( aand=arg.add_and, cou=cou, short=arg.short, y=y, m=m, w=w, d=d, H=H, M=M, S=S)
+
+    print(f"{relatime}{realtime}")
 
 if __name__ == "__main__":
     main()
