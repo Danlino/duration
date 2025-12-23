@@ -40,6 +40,9 @@ $ duration 123456789 -c2
 $ duration 123456789 -c3 -a
 3 years, 10 months, and 29 days
 
+$ duration 123456789 -r
+3 years, 10 months, 29 days, 21 hours, 33 minutes, 9 seconds (Tue, 25.Jan 2022 01:03)
+
 $ duration 123456789 -R
 Tue, 25.Jan 2022 00:58
 ```
