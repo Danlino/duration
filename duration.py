@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 from datetime import datetime, timedelta
 from argparse import Namespace
 import argparse
@@ -64,11 +64,20 @@ def units( aand: bool, cou: int, short: bool, y=0, m=0, w=0, d=0, H=0, M=0, S=0)
         else:
             return ", ".join(parts)
 
-def conversion(S: int, use_weeks: bool, only_weeks: bool) -> tuple:
+def conversion(S: int, use_weeks: bool, only_weeks: bool, only_days: bool) -> tuple:
     if S == 0:
         return 0, 0, 0, 0, 0, 0, 0
 
     remaining_seconds = S
+
+    if only_days:
+        d = int(remaining_seconds // 86400)
+        remaining_seconds %= 86400
+        H = int(remaining_seconds // 3600)
+        remaining_seconds %= 3600
+        M = int(remaining_seconds // 60)
+        S = int(remaining_seconds % 60)
+        return 0, 0, 0, d, H, M, S
 
     current = datetime.now()
 
@@ -173,6 +182,13 @@ def get_arg() -> Namespace:
                         help='show weeks as the highest time unit'
     )
 
+    parser.add_argument('-D', '--max-days',
+                        action='store_true',
+                        dest='only_days',
+                        default=False,
+                        help='show days as the highest time unit'
+    )
+
     parser.add_argument('-a', '--add-and',
                         action='store_true',
                         dest='add_and',
@@ -246,26 +262,27 @@ def get_sec(sec: int | None) -> int:
     return value
 
 def main():
+
     arg = get_arg()
     sec = get_sec(arg.sec)
-    test2k(sec)
     cou = abs(arg.count)
+    test2k(sec)
 
-    ys = conversion( sec, arg.week, arg.only_week )
+    ys = conversion( sec, arg.week, arg.only_week, arg.only_days )
 
-    rt = original_time(sec)
-    rl = units( arg.add_and, cou, arg.short, *ys )
+    tsp = original_time(sec)
+    rlt = units( arg.add_and, cou, arg.short, *ys )
 
     match ( arg.real_time, arg.real_only ):
 
         case ( False, False ):
-            print(f"{rl}")
+            print(f"{rlt}")
 
         case ( True, False ):
-            print(f"{rl} ({rt})")
+            print(f"{rlt} ({tsp})")
 
         case ( _, True ):
-            print(f"{rt}")
+            print(f"{tsp}")
 
 if __name__ == "__main__":
     main()
