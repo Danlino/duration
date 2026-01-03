@@ -1,7 +1,7 @@
 ##### Usage:
 ```
 $ duration 
-usage: duration [-h] [-v] [-s] [-c N] [-w] [-W] [-a] [-r] [-R] [sec]
+usage: duration [-h] [-v] [-s] [-c N] [-w] [-W] [-D] [-a] [-r] [-R] [sec]
 
 positional arguments:
   sec              time interval in seconds
@@ -13,6 +13,7 @@ options:
   -c N, --count N  maximum number of units in the output
   -w, --weeks      weeks will also be used in the output
   -W, --max-weeks  show weeks as the highest time unit
+  -D, --max-days   show days as the highest time unit
   -a, --add-and    shows "and" before the last unit (long format)
   -r, --real-time  show real date/time alongside relative
   -R, --real-only  show real date/time
@@ -33,6 +34,9 @@ $ duration 123456789 -w
 
 $ duration 123456789 -W
 204 weeks, 21 hours, 33 minutes, 9 seconds
+
+$ duration 123456789 -D
+1428 days, 21 hours, 33 minutes, 9 seconds
 
 $ duration 123456789 -c2
 3 years, 10 months
