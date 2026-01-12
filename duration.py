@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 from datetime import datetime, timedelta
 from argparse import Namespace
 import argparse
@@ -235,7 +235,7 @@ def test2k(sec: int) -> bool:
 def original_time(sec: int) -> str:
     now = datetime.now()
     ago = now - timedelta(seconds=sec)
-    return f'{ago.strftime("%a, %-d.%b %Y %H:%M")}'
+    return f'{ago:%a, }{ago.day}{ago:.%b %Y %H:%M}'
 
 def get_sec(sec: int | None) -> int:
     if sec is not None:
