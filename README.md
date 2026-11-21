@@ -1,7 +1,7 @@
 ##### Usage:
 ```
 $ duration 
-usage: duration [-h] [-v] [-s] [-c N] [-w] [-W] [-D] [-a] [-r] [-R] [sec]
+usage: duration [-h] [-v] [-s] [-c N] [-w] [-W] [-D] [-H] [-a] [-r] [-R] [sec]
 
 positional arguments:
   sec              time interval in seconds
