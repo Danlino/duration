@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 from datetime import datetime, timedelta
 from argparse import Namespace
 import argparse
 import calendar
 import sys
 
-def units( aand: bool, cou: int, short: bool, y=0, m=0, w=0, d=0, H=0, M=0, S=0) -> str:
+def units( aand: bool,
+           cou: int,
+           short: bool,
+           y=0, m=0, w=0,
+           d=0, H=0, M=0,
+           S=0) -> str:
     
     if short:
         parts = []
@@ -64,7 +69,10 @@ def units( aand: bool, cou: int, short: bool, y=0, m=0, w=0, d=0, H=0, M=0, S=0)
         else:
             return ", ".join(parts)
 
-def conversion(S: int, use_weeks: bool, only_weeks: bool, only_days: bool) -> tuple:
+def conversion(S: int, use_weeks: bool,
+                       only_weeks: bool,
+                       only_days: bool,
+                       only_hours: bool) -> tuple:
     if S == 0:
         return 0, 0, 0, 0, 0, 0, 0
 
@@ -78,6 +86,13 @@ def conversion(S: int, use_weeks: bool, only_weeks: bool, only_days: bool) -> tu
         M = int(remaining_seconds // 60)
         S = int(remaining_seconds % 60)
         return 0, 0, 0, d, H, M, S
+
+    if only_hours:
+        H = int(remaining_seconds // 3600)
+        remaining_seconds %= 3600
+        M = int(remaining_seconds // 60)
+        S = int(remaining_seconds % 60)
+        return 0, 0, 0, 0, H, M, S
 
     current = datetime.now()
 
@@ -189,6 +204,13 @@ def get_arg() -> Namespace:
                         help='show days as the highest time unit'
     )
 
+    parser.add_argument('-H', '--max-hours',
+                        action='store_true',
+                        dest='only_hours',
+                        default=False,
+                        help='show hours as the highest time unit'
+    )
+
     parser.add_argument('-a', '--add-and',
                         action='store_true',
                         dest='add_and',
@@ -268,7 +290,10 @@ def main():
     cou = abs(arg.count)
     test2k(sec)
 
-    ys = conversion( sec, arg.week, arg.only_week, arg.only_days )
+    ys = conversion( sec, arg.week,
+                          arg.only_week,
+                          arg.only_days,
+                          arg.only_hours )
 
     tsp = original_time(sec)
     rlt = units( arg.add_and, cou, arg.short, *ys )
