@@ -11,8 +11,7 @@ def units( aand: bool,
            cou: int,
            short: bool,
            y=0, m=0, w=0,
-           d=0, H=0, M=0,
-           S=0) -> str:
+           d=0, H=0, M=0, S=0) -> str:
     
     if short:
         parts = []
