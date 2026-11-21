@@ -14,6 +14,7 @@ options:
   -w, --weeks      weeks will also be used in the output
   -W, --max-weeks  show weeks as the highest time unit
   -D, --max-days   show days as the highest time unit
+  -H, --max-hours  show hours as the highest time unit
   -a, --add-and    shows "and" before the last unit (long format)
   -r, --real-time  show real date/time alongside relative
   -R, --real-only  show real date/time
